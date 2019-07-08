@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package com.mindtickle.baton.pb.batonRegistry;
+
+import "com/common.proto";
+import "Processor.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/MindTickle/baton-protos/pb/batonRegistry";
+
+service Subscriptions {
+    rpc ListActiveSubscription (ListSubscriptionRequest) returns (ListActiveSubscriptionResponse) {
+        option (google.api.http).get = "/baton/activesubscriptions";
+    };
+    rpc ListSubscription (ListSubscriptionRequest) returns (ListSubscriptionResponse) {
+        option (google.api.http).get = "/baton/subscriptions";
+    };
+    rpc FetchSubscription (FetchSubscriptionRequest) returns (FetchSubscriptionResponse) {
+        option (google.api.http).get = "/baton/subscription/{identity.id}";
+    };
+    rpc CreateSubscription (CreateSubscriptionRequest) returns (CreateSubscriptionResponse) {
+        option (google.api.http) = {
+            post : "/baton/subscription"
+            body : "subscription"
+        };
+    };
+    rpc UpdateSubscription (UpdateSubscriptionRequest) returns (UpdateSubscriptionResponse) {
+        option (google.api.http) = {
+            put : "/baton/subscription/{subscription.id}"
+            body : "subscription"
+        };
+    };
+    rpc DeleteSubscription (DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse) {
+        option (google.api.http).delete = "/baton/subscription/{identity.id}";
+    };
+}
+
+
+message Subscription {
+    int64 id = 1;
+    string publisher = 2;
+    int64 event_resource_id = 3;
+    int32 schema_version = 4;
+    int64 processor_id = 5;
+    com.mindtickle.baton.pb.common.State state = 6;
+    int64 created_at = 7;
+    int64 updated_at = 8;
+}
+
+message EnrichedSubscription {
+    Subscription subscription = 1;
+    Processor processor = 2;
+}
+
+message SubscriptionIdentity {
+    int64 id = 1;
+}
+
+message ListActiveSubscriptionResponse {
+    repeated EnrichedSubscription enriched_subscriptions = 1;
+}
+
+message ListSubscriptionRequest {
+}
+
+message ListSubscriptionResponse {
+    repeated Subscription subscriptions = 1;
+}
+message FetchSubscriptionRequest {
+    SubscriptionIdentity identity = 1;
+}
+message FetchSubscriptionResponse {
+    Subscription subscription = 1;
+}
+message CreateSubscriptionRequest {
+    Subscription subscription = 1;
+}
+message CreateSubscriptionResponse {
+    Subscription subscription = 1;
+}
+message UpdateSubscriptionRequest {
+    Subscription subscription = 1;
+}
+message UpdateSubscriptionResponse {
+    Subscription subscription = 1;
+}
+message DeleteSubscriptionRequest {
+    SubscriptionIdentity identity = 1;
+}
+message DeleteSubscriptionResponse {
+}

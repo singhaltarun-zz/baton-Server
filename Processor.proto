@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package com.mindtickle.baton.pb.batonRegistry;
+
+import "com/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/MindTickle/baton-protos/pb/batonRegistry";
+
+service Processors {
+    rpc ListProcessor (ListProcessorRequest) returns (ListProcessorResponse) {
+        option (google.api.http).get = "/baton/processors";
+    };
+    rpc FetchProcessor (FetchProcessorRequest) returns (FetchProcessorResponse) {
+        option (google.api.http).get = "/baton/processor/{identity.id}";
+    };
+    rpc FetchProcessorByName (FetchProcessorNameRequest) returns (FetchProcessorResponse) {
+        option (google.api.http).get = "/baton/processor/name/{identity.name}";
+    };
+    rpc CreateProcessor (CreateProcessorRequest) returns (CreateProcessorResponse) {
+        option (google.api.http) = {
+            post : "/baton/processor"
+            body : "processor"
+        };
+    };
+    rpc UpdateProcessor (UpdateProcessorRequest) returns (UpdateProcessorResponse) {
+        option (google.api.http) = {
+            put : "/baton/processor/{processor.id}"
+            body : "processor"
+        };
+    };
+    rpc DeleteProcessor (DeleteProcessorRequest) returns (DeleteProcessorResponse) {
+        option (google.api.http).delete = "/baton/processor/{identity.id}";
+    };
+}
+
+
+message Processor {
+    int64 id = 1; //primary key
+    string name = 2;
+    int32 version = 3;
+    int32 consumer_service_id = 4;
+    int64 timeout = 5;
+    int32 parallelism = 6;
+    int32 batch_count = 7;
+    string runtime_language = 8;
+    string source_path = 9;
+    string plugin_path = 10;
+    com.mindtickle.baton.pb.common.State state = 11;
+    string invocation_symbol = 12;
+    int64 created_at = 13;
+    int64 updated_at = 14;
+    string local_version = 15;
+    string namespace = 16;
+}
+
+message ProcessorIdentity {
+    int64 id = 1;
+}
+
+message ProcessorNameIdentity {
+    string name = 1;
+}
+
+message FetchProcessorNameRequest {
+    ProcessorNameIdentity identity = 1;
+}
+
+message ListProcessorRequest {
+    // optional parameter
+    string namespace = 1;
+}
+
+message ListProcessorResponse {
+    repeated Processor processors = 1;
+}
+
+message FetchProcessorRequest {
+    ProcessorIdentity identity = 1;
+}
+
+message FetchProcessorResponse {
+    Processor processor = 1;
+}
+
+message CreateProcessorRequest {
+    Processor processor = 1;
+}
+
+message CreateProcessorResponse {
+    Processor processor = 1;
+}
+
+message UpdateProcessorRequest {
+    Processor processor = 1;
+}
+
+message UpdateProcessorResponse {
+    Processor processor = 1;
+}
+message DeleteProcessorRequest {
+    ProcessorIdentity identity = 1;
+}
+message DeleteProcessorResponse {}

@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package com.mindtickle.baton.pb.batonRegistry;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/MindTickle/baton-protos/pb/batonRegistry";
+
+service Resources {
+    rpc FetchResource (FetchResourceRequest) returns (FetchResourceResponse) {
+        option (google.api.http).get = "/baton/resource/{identity.id}";
+    };
+    rpc ListResource (ListResourceRequest) returns (ListResourceResponse) {
+        option (google.api.http).get = "/baton/resources";
+    }
+    rpc CreateResource (CreateResourceRequest) returns (CreateResourceResponse) {
+        option (google.api.http) = {
+         post : "/baton/resource"
+         body : "resource"
+        };
+    };
+    rpc UpdateResource (UpdateResourceRequest) returns (UpdateResourceResponse) {
+        option (google.api.http) = {
+            put : "/baton/resource/{resource.id}"
+            body : "resource"
+        };
+    };
+    rpc DeleteResource (DeleteResourceRequest) returns (DeleteResourceResponse) {
+        option (google.api.http).delete = "/baton/resource/{identity.id}";
+    };
+}
+
+/*
+ *Event Resource table
+*/
+message EventResource {
+    int64 id = 1;
+    string topic_name = 2; // primary key (topic id)
+    string namespace = 3; // app name
+    string resource_name = 4; // resource name  // unique (namespace + resource_name)
+    int64 created_at = 5;
+    int64 updated_at = 6;
+}
+
+message EventResourceIdentity {
+    int64 id = 1;
+}
+
+message FetchResourceRequest {
+    EventResourceIdentity identity = 1;
+}
+
+message FetchResourceResponse {
+    EventResource resource = 1;
+}
+
+message ListResourceRequest {}
+
+message ListResourceResponse {
+    repeated EventResource resources = 1;
+}
+
+message CreateResourceRequest {
+    EventResource resource = 1;
+}
+
+message CreateResourceResponse {
+    EventResource resource = 1;
+}
+
+message UpdateResourceRequest {
+    EventResource resource = 1;
+}
+
+message UpdateResourceResponse {
+    EventResource resource = 1;
+}
+
+message DeleteResourceRequest {
+    EventResourceIdentity identity = 1;
+}
+
+message DeleteResourceResponse {}

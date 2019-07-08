@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package com.mindtickle.baton.pb.batonRegistry;
+
+import "com/common.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/MindTickle/baton-protos/pb/batonRegistry";
+
+service Tenants {
+    rpc FetchTenant (FetchTenantRequest) returns (TenantResponse) {
+        option (google.api.http).get = "/baton/tenant/{identity.id}";
+    };
+    rpc ListTenant (ListTenantRequest) returns (ListTenantResponse) {
+        option (google.api.http).get = "/baton/tenants";
+    };
+    rpc CreateTenant (TenantRequest) returns (TenantResponse) {
+        option (google.api.http) = {
+            post: "/baton/tenant"
+            body: "tenant"
+        };
+    };
+    rpc UpdateTenant (TenantRequest) returns (TenantResponse) {
+        option (google.api.http) = {
+            put: "/baton/tenant/{tenant.id}"
+            body: "tenant"
+        };
+    };
+    rpc DeleteTenant (TenantDeleteRequest) returns (TenantDeleteResponse) {
+        option (google.api.http).delete = "/baton/tenant/{identity.id}";
+    };
+}
+
+/*
+ *Tenant.proto Table
+*/
+message Tenant {
+    int64 id = 1; // primary key (partition id)
+    string org_id = 2; // unique
+    int64 created_at = 4;
+    int64 updated_at = 5;
+    com.mindtickle.baton.pb.common.State state = 6;
+}
+
+message TenantIdentity {
+    int64 id = 1;
+}
+
+message TenantRequest {
+    Tenant tenant = 1;
+}
+
+message TenantResponse {
+    Tenant tenant = 1;
+}
+
+message FetchTenantRequest {
+    TenantIdentity identity = 1;
+}
+
+message TenantDeleteRequest {
+    TenantIdentity identity = 1;
+}
+
+message TenantDeleteResponse {}
+
+message ListTenantRequest {}
+
+message ListTenantResponse {
+    repeated Tenant tenants = 1;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package com.mindtickle.baton.pb.common;
+
+option go_package = "github.com/MindTickle/baton-protos/pb/common";
+
+
+enum State {
+    active = 0;
+    disabled = 1;
+    paused = 2;
+}
