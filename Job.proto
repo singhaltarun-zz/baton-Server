@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package com.mindtickle.baton.pb.munimG;
+
+option go_package = "github.com/MindTickle/baton-protos/pb/munimG";
+
+service Jobs {
+    rpc GetJob (GetJobRequest) returns (JobResponse) {}
+	rpc ScheduleJob (ScheduleJobRequest) returns (JobResponse){}
+    rpc AssignJob (AssignJobRequest) returns (JobResponse){}
+    rpc PickJob (PickJobRequest) returns (JobResponse){}
+    rpc SyncJob (SyncJobRequest) returns (JobResponse){}
+    rpc TimeoutJob (TimeoutJobRequest) returns (JobResponse){}
+    rpc FailJob (FailJobRequest) returns (JobResponse) {}
+    rpc CompleteJob (CompleteJobRequest) returns (JobResponse) {}
+    rpc UnblockJob (UnblockJobRequest) returns (JobResponse) {}
+}
+
+message Job {
+    int64 id = 1;
+    int64 stat_id = 2;
+    int64 scheduled_at = 3;
+    int64 assigned_at = 4;
+    int64 picked_at = 5;
+    int64 synced_at = 6;
+    int64 started_at = 7;
+    int64 completion_at = 8;
+    string worker_id = 9;
+    int64 start_offset = 10;
+    int64 end_offset = 11;
+    int32 max_memory = 12;
+    int32 time_taken = 13;
+    string response = 14;
+    string state = 15;
+    bool is_active = 16;
+    int32 retryCount = 17;
+    int64 created_at = 18;
+    int64 updated_at = 19;
+    string namespace = 20;
+};
+
+message GetJob {
+    int64 id = 1;
+}
+
+message GetJobRequest {
+    GetJob job = 1;
+}
+
+message ScheduleJob {
+    int64 stat_id = 1;
+    int64 scheduled_at = 2;
+    string namespace = 3;
+}
+
+message ScheduleJobRequest {
+    ScheduleJob job = 1;
+}
+
+message AssignJob {
+    string worker_id = 1;
+    string namespace = 2;
+}
+
+message AssignJobRequest {
+    AssignJob job = 1;
+}
+
+message PickJob {
+    int64 id = 1;
+    int64 picked_at = 2;
+}
+
+message PickJobRequest {
+    PickJob job = 1;
+}
+
+message SyncJob {
+    int64 id = 1;
+    int64 synced_at = 2;
+}
+
+message SyncJobRequest {
+    SyncJob job = 1;
+}
+
+message TimeoutJob {
+    int64 id = 1;
+    int64 started_at = 2;
+    int64 completion_at = 3;
+    int64 start_offset = 4;
+    int64 end_offset = 5;
+    int32 max_memory = 6;
+    int32 time_taken = 7;
+    string response = 8;
+    int32 retryCount = 9;
+}
+
+message TimeoutJobRequest {
+    TimeoutJob job = 1;
+}
+
+message FailJob {
+    int64 id = 1;
+    int64 started_at = 2;
+    int64 completion_at = 3;
+    int64 start_offset = 4;
+    int64 end_offset = 5;
+    int32 max_memory = 6;
+    int32 time_taken = 7;
+    string response = 8;
+    int32 retryCount = 9;
+}
+
+message FailJobRequest {
+    FailJob job = 1;
+}
+
+message CompleteJob {
+    int64 id = 1;
+    int64 started_at = 2;
+    int64 completion_at = 3;
+    int64 start_offset = 4;
+    int64 end_offset = 5;
+    int32 max_memory = 6;
+    int32 time_taken = 7;
+    string response = 8;
+    int32 retryCount = 9;
+    string WorkerId = 10;
+}
+
+message CompleteJobRequest {
+    CompleteJob job = 1;
+}
+
+message JobResponse {
+    Job job = 1;
+}
+
+message UnblockJob {
+    int64 id = 1;
+}
+
+message UnblockJobRequest {
+    UnblockJob job = 1;
+}
+
