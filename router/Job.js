@@ -17,7 +17,7 @@ var packageDefinition = protoLoader.loadSync(
 
 const job = grpc.loadPackageDefinition(packageDefinition).com.mindtickle.baton.pb.munimG;
 
-var client = new job.Jobs("localhost" + ":" + "80",
+var client = new job.Jobs("localhost" + ":" + "9090",
     grpc.credentials.createInsecure());
 
 var jsonParser = bodyParser.json({ type: 'application/json' } );
@@ -26,6 +26,7 @@ router.post('/',jsonParser,(req,res,next)=> {
     try{
         client.GetJob(getRequests , (error, response) => {
             res.status(200).json(response);
+            // console.log(response);
         });
     }catch(e){
         console.log(e);
